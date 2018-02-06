@@ -9,3 +9,6 @@ App registers two global system hotkeys: Alt+Shift+W for capturing fullscreen sh
 
 ## Imgur Upload
 To enable Imgur uploading, you'll have to get an API key in user account settings.
+
+## Logging
+App creates two log files: LelShotter.err.log and LelShotter.out.log.
