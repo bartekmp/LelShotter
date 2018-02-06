@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2008
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LelShotter", "LelShotter\LelShotter.csproj", "{6161801F-BE62-41C4-A445-CB43AD10BAC1}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "LelShotterInstaller", "LelShotterInstaller\LelShotterInstaller.wixproj", "{52AB275B-2265-4302-B981-40339E294300}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Debug|x64.Build.0 = Debug|Any CPU
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Debug|x86.Build.0 = Debug|Any CPU
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Release|x64.ActiveCfg = Release|Any CPU
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Release|x64.Build.0 = Release|Any CPU
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Release|x86.ActiveCfg = Release|Any CPU
+		{6161801F-BE62-41C4-A445-CB43AD10BAC1}.Release|x86.Build.0 = Release|Any CPU
+		{52AB275B-2265-4302-B981-40339E294300}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{52AB275B-2265-4302-B981-40339E294300}.Debug|x64.ActiveCfg = Debug|x86
+		{52AB275B-2265-4302-B981-40339E294300}.Debug|x86.ActiveCfg = Debug|x86
+		{52AB275B-2265-4302-B981-40339E294300}.Debug|x86.Build.0 = Debug|x86
+		{52AB275B-2265-4302-B981-40339E294300}.Release|Any CPU.ActiveCfg = Release|x86
+		{52AB275B-2265-4302-B981-40339E294300}.Release|x64.ActiveCfg = Release|x86
+		{52AB275B-2265-4302-B981-40339E294300}.Release|x86.ActiveCfg = Release|x86
+		{52AB275B-2265-4302-B981-40339E294300}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CE0EBC3D-A95B-4F8C-B0F9-AC2316B5E2E8}
+	EndGlobalSection
+EndGlobal
