@@ -25,16 +25,16 @@ namespace LelShotter
             Save = save;
             Copy = copy;
         }
-        public async Task<DataModels.StatusMessage> TakeScreenshot(DataModels.ScreenshotMode mode)
+        public async Task<Models.StatusMessage> TakeScreenshot(Models.ScreenshotMode mode)
         {
             var completeMessage = string.Empty;
-            var levelMessage = DataModels.Level.Error;
+            var levelMessage = Models.Level.Error;
 
             if (!(Upload || Save || Copy))
             {
-                levelMessage = DataModels.Level.Info;
+                levelMessage = Models.Level.Info;
                 completeMessage = "No action was selected!";
-                return new DataModels.StatusMessage(levelMessage, completeMessage);
+                return new Models.StatusMessage(levelMessage, completeMessage);
             }
 
             var bitmap = new Bitmap((int)ScreenWidth, (int)ScreenHeight);
@@ -46,12 +46,12 @@ namespace LelShotter
             catch (Exception ex)
             {
                 completeMessage = ex.Message;
-                levelMessage = DataModels.Level.Error;
+                levelMessage = Models.Level.Error;
 
-                return new DataModels.StatusMessage(levelMessage, completeMessage);
+                return new Models.StatusMessage(levelMessage, completeMessage);
             }
             
-            if (mode == DataModels.ScreenshotMode.Selection)
+            if (mode == Models.ScreenshotMode.Selection)
             {
                 // let the user mark the selection on screen
                 var areaSelector = new AreaSelector();
@@ -62,21 +62,21 @@ namespace LelShotter
                 }
                 else
                 {
-                    levelMessage = DataModels.Level.Error;
+                    levelMessage = Models.Level.Error;
                     completeMessage = "Could not get user selection!";
-                    return new DataModels.StatusMessage(levelMessage, completeMessage);
+                    return new Models.StatusMessage(levelMessage, completeMessage);
                 }
             }
                 
             if (Save)
             {
                 var filename =
-                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                    Path.Combine(Properties.Settings.Default.SavePath,
                         $"ScreenCapture-{DateTime.Now:yyyyMMdd-HHmmss}.png"
                     );
                 bitmap.Save(filename);
                 completeMessage += $"Screenshot saved to {filename}";
-                levelMessage = DataModels.Level.Success;
+                levelMessage = Models.Level.Success;
             }
 
             if (Upload)
@@ -86,13 +86,13 @@ namespace LelShotter
                 {
                     System.Diagnostics.Process.Start(url);
                     completeMessage += "Image uploaded to Imgur, opening URL...";
-                    levelMessage = DataModels.Level.Success;
+                    levelMessage = Models.Level.Success;
                 }
                 else
                 {
                     Clipboard.SetText(url);
                     completeMessage += "Image uploaded to Imgur, URL copied to clipboard.";
-                    levelMessage = DataModels.Level.Success;
+                    levelMessage = Models.Level.Success;
                 }
             }
 
@@ -101,12 +101,12 @@ namespace LelShotter
                 var bitmapData = LoadBitmap(bitmap);
                 Clipboard.SetImage(bitmapData);
                 completeMessage += "Image saved to clipboard.";
-                levelMessage = DataModels.Level.Success;
+                levelMessage = Models.Level.Success;
             }
 
             screenGraphics.Dispose();
             bitmap.Dispose();
-            return new DataModels.StatusMessage(levelMessage, completeMessage);
+            return new Models.StatusMessage(levelMessage, completeMessage);
         }
      
         [DllImport("gdi32")]

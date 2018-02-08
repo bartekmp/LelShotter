@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 using System.Windows.Interop;
 
-namespace LelShotter
+namespace LelShotter.Utils
 {
     public class HotKey : IDisposable
     {
@@ -23,10 +22,10 @@ namespace LelShotter
 
         public Key Key { get; }
         public KeyModifier KeyModifiers { get; }
-        public Action<HotKey, DataModels.ScreenshotMode> Action { get; }
+        public Action<HotKey, Models.ScreenshotMode> Action { get; }
         public int Id { get; set; }
 
-        public HotKey(Key k, KeyModifier keyModifiers, Action<HotKey, DataModels.ScreenshotMode> action, bool register = true)
+        public HotKey(Key k, KeyModifier keyModifiers, Action<HotKey, Models.ScreenshotMode> action, bool register = true)
         {
             Key = k;
             KeyModifiers = keyModifiers;
@@ -77,7 +76,7 @@ namespace LelShotter
             {
                 return;
             }
-            hotKey.Action?.Invoke(hotKey, DataModels.ScreenshotMode.FullScreen); // todo check how to pass one more arg
+            hotKey.Action?.Invoke(hotKey, Models.ScreenshotMode.FullScreen); // todo check how to pass one more arg
             handled = true;
         }
 

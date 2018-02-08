@@ -1,7 +1,9 @@
 ﻿using System.Drawing;
 using System.Threading.Tasks;
+using Imgur.API;
 using Imgur.API.Authentication.Impl;
 using Imgur.API.Endpoints.Impl;
+using LelShotter.Utils;
 
 namespace LelShotter
 {
@@ -12,8 +14,16 @@ namespace LelShotter
             var client = new ImgurClient("[REDACTED]", "[REDACTED]");
             var endpoint = new ImageEndpoint(client);
             var bytes = ImageToByte(image);
-            var response = await endpoint.UploadImageBinaryAsync(bytes);
-            return response.Link;
+            try
+            {
+                var response = await endpoint.UploadImageBinaryAsync(bytes);
+                return response.Link;
+            }
+            catch (ImgurException ie)
+            {
+                Logger.LogError($"Exception occurred while uploading an image: {ie.Message}");
+                return null;
+            }
         }
         private static byte[] ImageToByte(Image img)
         {

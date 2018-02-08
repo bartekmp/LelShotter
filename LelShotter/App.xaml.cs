@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using LelShotter.Utils;
+using LelShotter.Views;
 
 namespace LelShotter
 {
@@ -18,13 +21,30 @@ namespace LelShotter
         {
             base.OnStartup(e);
 
+            var savePath = LelShotter.Properties.Settings.Default.SavePath;
+            if (!Directory.Exists(savePath))
+            {
+                var dirCreated = Utility.CreateDirectory(savePath);
+                if (dirCreated)
+                {
+                    Logger.LogInfo($"Created default saving directory at {savePath}");
+                }
+                else
+                {
+                    Logger.LogInfo("Setting desktop as default saving directory");
+                    LelShotter.Properties.Settings.Default.SavePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                }
+
+            }
+
             _notifyIcon = new NotifyIcon
             {
                 Icon = LelShotter.Properties.Resources.MyIcon,
                 Visible = true
             };
-            _hotKeys.Add(new HotKey(Key.W, KeyModifier.Shift | KeyModifier.Alt, (h, m) => { TakeScreenshot(DataModels.ScreenshotMode.FullScreen); }));
-            _hotKeys.Add(new HotKey(Key.S, KeyModifier.Shift | KeyModifier.Alt, (h, m) => { TakeScreenshot(DataModels.ScreenshotMode.Selection); }));
+
+            _hotKeys.Add(new HotKey(Key.W, KeyModifier.Shift | KeyModifier.Alt, (h, m) => { TakeScreenshot(Models.ScreenshotMode.FullScreen); }));
+            _hotKeys.Add(new HotKey(Key.S, KeyModifier.Shift | KeyModifier.Alt, (h, m) => { TakeScreenshot(Models.ScreenshotMode.Selection); }));
             CreateContextMenu();
             Logger.LogInfo("LelShotter started");
         }
@@ -42,18 +62,21 @@ namespace LelShotter
                 new ToolStripMenuItem("Upload to Imgur") { CheckOnClick = true },
                 new ToolStripMenuItem("Copy to clipboard") { CheckOnClick = true },
                 new ToolStripSeparator(),
+                new ToolStripMenuItem("Configuration"),
+                new ToolStripSeparator(),
                 new ToolStripMenuItem("Exit") 
             });
 
-            _notifyIcon.ContextMenuStrip.Items[0].Click += (s, e) => TakeScreenshot(DataModels.ScreenshotMode.FullScreen);
-            _notifyIcon.ContextMenuStrip.Items[1].Click += (s, e) => TakeScreenshot(DataModels.ScreenshotMode.Selection);
+            _notifyIcon.ContextMenuStrip.Items[0].Click += (s, e) => TakeScreenshot(Models.ScreenshotMode.FullScreen);
+            _notifyIcon.ContextMenuStrip.Items[1].Click += (s, e) => TakeScreenshot(Models.ScreenshotMode.Selection);
             _notifyIcon.ContextMenuStrip.Items[3].Click += (s, e) => { _save = !_save; };
             _notifyIcon.ContextMenuStrip.Items[4].Click += (s, e) => { _upload = !_upload; };
             _notifyIcon.ContextMenuStrip.Items[5].Click += (s, e) => { _copy = !_copy; };
-            _notifyIcon.ContextMenuStrip.Items[7].Click += (s, e) => ExitApplication();
+            _notifyIcon.ContextMenuStrip.Items[7].Click += (s, e) => new Configuration().Show();
+            _notifyIcon.ContextMenuStrip.Items[9].Click += (s, e) => ExitApplication();
         }
 
-        private async void TakeScreenshot(DataModels.ScreenshotMode mode)
+        private async void TakeScreenshot(Models.ScreenshotMode mode)
         {
             Logger.LogInfo($"Taking screenshot with flags: upload={_upload}, save={_save}, copy={_copy}");
             var message = await new Screenshotter(_upload, _save, _copy).TakeScreenshot(mode);
@@ -61,7 +84,7 @@ namespace LelShotter
             CompletePopup(message);
         }
 
-        private void CompletePopup(DataModels.StatusMessage msg)
+        private void CompletePopup(Models.StatusMessage msg)
         {
             _notifyIcon.BalloonTipText = msg.Level.ToString();
             _notifyIcon.BalloonTipIcon = ToolTipIcon.Info;

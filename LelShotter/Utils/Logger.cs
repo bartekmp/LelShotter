@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace LelShotter
+namespace LelShotter.Utils
 {
     public static class Logger
     {
@@ -23,17 +23,17 @@ namespace LelShotter
             Err.AutoFlush = true;
         }
 
-        public static void Log(DataModels.Level level, string msg)
+        public static void Log(Models.Level level, string msg)
         {
-            if (level == DataModels.Level.Info || level == DataModels.Level.Success)
+            if (level == Models.Level.Info || level == Models.Level.Success)
             {
                 LogInfo(msg);
             }
-            else if (level == DataModels.Level.Error)
+            else if (level == Models.Level.Error)
             {
                 LogError(msg);
             }
-            else if (level == DataModels.Level.Debug)
+            else if (level == Models.Level.Debug)
             {
                 LogDebug(msg);
             }
@@ -41,38 +41,38 @@ namespace LelShotter
 
         public static void LogInfo(string msg)
         {
-            Out.WriteLine(LogFormat, DateTime.UtcNow.ToString("u"), DataModels.Level.Info.ToString().ToUpper(), msg);
+            Out.WriteLine(LogFormat, DateTime.UtcNow.ToString("u"), Models.Level.Info.ToString().ToUpper(), msg);
         }
 
         public static void LogDebug(string msg)
         {
-            Out.WriteLine(LogFormat, DateTime.UtcNow.ToString("u"), DataModels.Level.Debug.ToString().ToUpper(), msg);
+            Out.WriteLine(LogFormat, DateTime.UtcNow.ToString("u"), Models.Level.Debug.ToString().ToUpper(), msg);
         }
 
         public static void LogError(string msg)
         {
-            var message = string.Format(LogFormat, DateTime.UtcNow.ToString("u"), DataModels.Level.Error.ToString().ToUpper(), msg);
+            var message = string.Format(LogFormat, DateTime.UtcNow.ToString("u"), Models.Level.Error.ToString().ToUpper(), msg);
             Out.WriteLine(message);
             Err.WriteLine(message);
         }
 
         public static void ToConsoleInfo(string msg)
         {
-            var message = string.Format(LogFormat, DateTime.UtcNow.ToString("u"), DataModels.Level.Info.ToString().ToUpper(), msg);
+            var message = string.Format(LogFormat, DateTime.UtcNow.ToString("u"), Models.Level.Info.ToString().ToUpper(), msg);
             Console.WriteLine(message);
             Out.WriteLine(message);
         }
 
         public static void ToConsoleDebug(string msg)
         {
-            var message = string.Format(LogFormat, DateTime.UtcNow.ToString("u"), DataModels.Level.Debug.ToString().ToUpper(), msg);
+            var message = string.Format(LogFormat, DateTime.UtcNow.ToString("u"), Models.Level.Debug.ToString().ToUpper(), msg);
             Console.WriteLine(message);
             Out.WriteLine(message);
         }
 
         public static void ToConsoleError(string msg)
         {
-            var message = string.Format(LogFormat, DateTime.UtcNow.ToString("u"), DataModels.Level.Error.ToString().ToUpper(), msg);
+            var message = string.Format(LogFormat, DateTime.UtcNow.ToString("u"), Models.Level.Error.ToString().ToUpper(), msg);
             Console.WriteLine(message);
             Out.WriteLine(message);
         }
