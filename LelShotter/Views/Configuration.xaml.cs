@@ -2,7 +2,9 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
+using LelShotter.Models;
 using LelShotter.Utils;
+using Settings = LelShotter.Properties.Settings;
 
 namespace LelShotter.Views
 {
@@ -13,7 +15,7 @@ namespace LelShotter.Views
     {
         public Configuration()
         {
-            Properties.Settings.Default.Upgrade();
+            Settings.Default.Upgrade();
             InitializeComponent();
         }
 
@@ -25,29 +27,33 @@ namespace LelShotter.Views
                 if (result != System.Windows.Forms.DialogResult.OK ||
                     string.IsNullOrWhiteSpace(fbd.SelectedPath)) return;
 
-                if (Properties.Settings.Default.SavePath != fbd.SelectedPath)
+                if (Settings.Default.SavePath != fbd.SelectedPath)
                 {
                     if (!Directory.Exists(fbd.SelectedPath))
                     {
                         var createdDir = Utility.CreateDirectory(fbd.SelectedPath);
                         if (!createdDir)
                         {
-                            Logger.LogError($"Unable to create and change destination directory to {fbd.SelectedPath}");
+                            Logger.Log(Level.Error, $"Unable to create and change destination directory to {fbd.SelectedPath}");
                             return;
                         }
                     }
                 }
-                Properties.Settings.Default.SavePath = fbd.SelectedPath;
-                Properties.Settings.Default.Save();
-                Properties.Settings.Default.Upgrade();
+                Settings.Default.SavePath = fbd.SelectedPath;
+                Settings.Default.Save();
+                Settings.Default.Upgrade();
             }
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            Properties.Settings.Default.Save();
-            Properties.Settings.Default.Upgrade();
+            Settings.Default.Save();
+            Settings.Default.Upgrade();
+
             base.OnClosing(e);
+
+            e.Cancel = true;
+            Hide();
         }
     }
 }

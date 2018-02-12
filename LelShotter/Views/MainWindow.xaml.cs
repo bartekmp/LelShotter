@@ -1,4 +1,4 @@
-﻿namespace LelShotter
+﻿namespace LelShotter.Views
 {
     public partial class MainWindow
     {

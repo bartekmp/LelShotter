@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LelShotter.Models;
 
 namespace LelShotter.Utils
 {
@@ -18,11 +19,11 @@ namespace LelShotter.Utils
             }
             catch (IOException ioException)
             {
-                Logger.LogError($"Cannot create directory {path}, reason: {ioException.Message}");
+                Logger.Log(Level.Error, $"Cannot create directory {path}, reason: {ioException.Message}");
             }
             catch (UnauthorizedAccessException unauthorizedAccess)
             {
-                Logger.LogError($"Insufficient privileges to create directory {path}, reason: {unauthorizedAccess.Message}");
+                Logger.Log(Level.Error, $"Insufficient privileges to create directory {path}, reason: {unauthorizedAccess.Message}");
             }
 
             return false;

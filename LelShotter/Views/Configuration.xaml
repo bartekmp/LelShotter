@@ -3,22 +3,37 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LelShotter.Views"
+        xmlns:local="clr-namespace:LelShotter"
         xmlns:appSettings="clr-namespace:LelShotter.Properties"
         mc:Ignorable="d"
-        Title="Configuration" Height="446.394" Width="483.173">
+        Title="LelShotter Preferences" Height="500" Width="483.173" ResizeMode="NoResize">
     <Grid>
-        <StackPanel HorizontalAlignment="Left" Height="395" Margin="10,10,0,0" VerticalAlignment="Top" Width="455">
-            <GroupBox Header="Save location" HorizontalAlignment="Left" Height="66" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
-                <DockPanel HorizontalAlignment="Left" Height="28" LastChildFill="False" Margin="10,10,0,0" VerticalAlignment="Top" Width="402">
-                    <TextBox HorizontalAlignment="Left" Height="28" Margin="0,0,0,0" TextWrapping="Wrap" x:Name="PathBox" Text="{Binding SavePath, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" VerticalAlignment="Top" Width="253"/>
+        <StackPanel HorizontalAlignment="Left" Height="451" Margin="10,10,0,0" VerticalAlignment="Top" Width="455">
+            <GroupBox Header="Save location" HorizontalAlignment="Left" Height="Auto" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
+                <DockPanel HorizontalAlignment="Left" Height="28" LastChildFill="False" Margin="10,10,10,10" VerticalAlignment="Top" Width="402">
+                    <TextBox HorizontalAlignment="Left" Height="24" Margin="0,0,0,0" TextWrapping="Wrap" x:Name="PathBox" Text="{Binding SavePath, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" VerticalAlignment="Top" Width="253"/>
                     <Button Content="Choose path" HorizontalAlignment="Right" Margin="32,2,0,0" VerticalAlignment="Top" Width="75" Click="SetPath_Click"/>
                 </DockPanel>
             </GroupBox>
-            <GroupBox Header="Autostart" HorizontalAlignment="Left" Height="57" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
-                <DockPanel HorizontalAlignment="Left" Height="20" LastChildFill="False" Margin="10,10,0,0" VerticalAlignment="Top" Width="402">
-                    <CheckBox IsEnabled="False" x:Name="AutostartCheckBox" Content="Launch after system start - TBD" Height="28" VerticalAlignment="Top" IsChecked="{Binding AutoStart, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" />
+            <GroupBox Header="File format" HorizontalAlignment="Left" Height="Auto" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
+                <DockPanel HorizontalAlignment="Left" Height="24" LastChildFill="False" Margin="10,10,10,10" VerticalAlignment="Top" Width="402">
+                    <Label Content="Screenshot file format:"/>
+                    <ComboBox IsEnabled="False" Width="Auto" SelectedItem="{Binding UsedFormat, Mode=OneWayToSource}">
+                        <ComboBoxItem Content="PNG" IsSelected="True"/>
+                        <ComboBoxItem Content="JPG"/>
+                    </ComboBox>
                 </DockPanel>
+            </GroupBox>
+            <GroupBox Header="Debug mode" HorizontalAlignment="Left" Height="Auto" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
+                <StackPanel Margin="10,10,10,10" Width="Auto">
+                    <CheckBox x:Name="VerboseModeCheckBox" Content="Verbose logging" Height="28" VerticalAlignment="Top" IsChecked="{Binding VerboseMode, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" />
+                    <CheckBox x:Name="DebugModeCheckBox" Content="Debug logging" Height="28" VerticalAlignment="Top" IsChecked="{Binding DebugMode, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Autostart" HorizontalAlignment="Left" Height="Auto" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
+                <StackPanel Margin="10,10,10,10" Width="Auto">
+                    <CheckBox IsEnabled="False" x:Name="AutostartCheckBox" Content="Launch after system start" Height="28" VerticalAlignment="Top" IsChecked="{Binding AutoStart, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" />
+                </StackPanel>
             </GroupBox>
         </StackPanel>
     </Grid>

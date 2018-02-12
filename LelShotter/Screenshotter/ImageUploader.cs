@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 using Imgur.API;
 using Imgur.API.Authentication.Impl;
 using Imgur.API.Endpoints.Impl;
+using LelShotter.Models;
 using LelShotter.Utils;
 
-namespace LelShotter
+namespace LelShotter.Screenshotter
 {
     public class ImageUploader
     {
@@ -21,7 +22,7 @@ namespace LelShotter
             }
             catch (ImgurException ie)
             {
-                Logger.LogError($"Exception occurred while uploading an image: {ie.Message}");
+                Logger.Log(Level.Info, $"Exception occurred while uploading an image: {ie.Message}");
                 return null;
             }
         }

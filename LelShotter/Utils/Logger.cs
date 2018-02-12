@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Settings = LelShotter.Properties.Settings;
 
 namespace LelShotter.Utils
 {
@@ -27,29 +28,38 @@ namespace LelShotter.Utils
         {
             if (level == Models.Level.Info || level == Models.Level.Success)
             {
-                LogInfo(msg);
+                if (Settings.Default.DebugMode)
+                {
+                    LogInfo(msg);
+                }
             }
             else if (level == Models.Level.Error)
             {
-                LogError(msg);
+                if (Settings.Default.VerboseMode)
+                {
+                    LogError(msg);
+                }
             }
             else if (level == Models.Level.Debug)
             {
-                LogDebug(msg);
+                if (Settings.Default.DebugMode)
+                {
+                    LogDebug(msg);
+                }
             }
         }
 
-        public static void LogInfo(string msg)
+        private static void LogInfo(string msg)
         {
             Out.WriteLine(LogFormat, DateTime.UtcNow.ToString("u"), Models.Level.Info.ToString().ToUpper(), msg);
         }
 
-        public static void LogDebug(string msg)
+        private static void LogDebug(string msg)
         {
             Out.WriteLine(LogFormat, DateTime.UtcNow.ToString("u"), Models.Level.Debug.ToString().ToUpper(), msg);
         }
 
-        public static void LogError(string msg)
+        private static void LogError(string msg)
         {
             var message = string.Format(LogFormat, DateTime.UtcNow.ToString("u"), Models.Level.Error.ToString().ToUpper(), msg);
             Out.WriteLine(message);

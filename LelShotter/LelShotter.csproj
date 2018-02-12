@@ -97,20 +97,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AreaSelector.cs" />
+    <Compile Include="Models\DataFormats.cs" />
+    <Compile Include="Screenshotter\AreaSelector.cs" />
     <Compile Include="Models\DataModels.cs" />
     <Compile Include="Models\LogLevels.cs" />
     <Compile Include="Models\StatusMessage.cs" />
-    <Compile Include="Utils\Config.cs" />
     <Compile Include="Utils\HotKey.cs" />
-    <Compile Include="ImageUploader.cs" />
+    <Compile Include="Screenshotter\ImageUploader.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Screenshotter.cs" />
+    <Compile Include="Screenshotter\Screenshotter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Utils\Utility.cs" />
