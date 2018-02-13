@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using LelShotter.Models;
+using LelShotter.Properties;
+using LelShotter.Utils;
 
 namespace LelShotter.Screenshotter
 {
@@ -25,16 +28,16 @@ namespace LelShotter.Screenshotter
             Save = save;
             Copy = copy;
         }
-        public async Task<Models.StatusMessage> TakeScreenshot(Models.ScreenshotMode mode)
+        public async Task<StatusMessage> TakeScreenshot(ScreenshotMode mode)
         {
             var completeMessage = string.Empty;
-            var levelMessage = Models.Level.Error;
+            var levelMessage = Level.Error;
 
             if (!(Upload || Save || Copy))
             {
-                levelMessage = Models.Level.Info;
+                levelMessage = Level.Info;
                 completeMessage = "No action was selected!";
-                return new Models.StatusMessage(levelMessage, completeMessage);
+                return new StatusMessage(levelMessage, completeMessage);
             }
 
             var bitmap = new Bitmap((int)ScreenWidth, (int)ScreenHeight);
@@ -46,14 +49,13 @@ namespace LelShotter.Screenshotter
             catch (Exception ex)
             {
                 completeMessage = ex.Message;
-                levelMessage = Models.Level.Error;
+                levelMessage = Level.Error;
 
-                return new Models.StatusMessage(levelMessage, completeMessage);
+                return new StatusMessage(levelMessage, completeMessage);
             }
             
-            if (mode == Models.ScreenshotMode.Selection)
+            if (mode == ScreenshotMode.Selection)
             {
-                // let the user mark the selection on screen
                 var areaSelector = new AreaSelector();
                 var area = areaSelector.SelectArea(bitmap);
                 if (area != null)
@@ -62,21 +64,30 @@ namespace LelShotter.Screenshotter
                 }
                 else
                 {
-                    levelMessage = Models.Level.Error;
+                    levelMessage = Level.Error;
                     completeMessage = "Could not get user selection!";
-                    return new Models.StatusMessage(levelMessage, completeMessage);
+                    return new StatusMessage(levelMessage, completeMessage);
                 }
             }
                 
             if (Save)
             {
+                var savePath = Environment.ExpandEnvironmentVariables(Settings.Default.SavePath);
+
                 var filename =
-                    Path.Combine(Properties.Settings.Default.SavePath,
-                        $"ScreenCapture-{DateTime.Now:yyyyMMdd-HHmmss}.png"
+                    Path.Combine(savePath,
+                        $"ScreenCapture -{DateTime.Now:yyyyMMdd-HHmmss}.png"
                     );
-                bitmap.Save(filename);
+                try
+                {
+                    bitmap.Save(filename);
+                }
+                catch (ExternalException ex)
+                {
+                    Logger.Log(Level.Error, ex.Message);
+                }
                 completeMessage += $"Screenshot saved to {filename}";
-                levelMessage = Models.Level.Success;
+                levelMessage = Level.Success;
             }
 
             if (Upload)
@@ -86,13 +97,13 @@ namespace LelShotter.Screenshotter
                 {
                     System.Diagnostics.Process.Start(url);
                     completeMessage += "Image uploaded to Imgur, opening URL...";
-                    levelMessage = Models.Level.Success;
+                    levelMessage = Level.Success;
                 }
                 else
                 {
                     Clipboard.SetText(url);
                     completeMessage += "Image uploaded to Imgur, URL copied to clipboard.";
-                    levelMessage = Models.Level.Success;
+                    levelMessage = Level.Success;
                 }
             }
 
@@ -101,12 +112,12 @@ namespace LelShotter.Screenshotter
                 var bitmapData = LoadBitmap(bitmap);
                 Clipboard.SetImage(bitmapData);
                 completeMessage += "Image saved to clipboard.";
-                levelMessage = Models.Level.Success;
+                levelMessage = Level.Success;
             }
 
             screenGraphics.Dispose();
             bitmap.Dispose();
-            return new Models.StatusMessage(levelMessage, completeMessage);
+            return new StatusMessage(levelMessage, completeMessage);
         }
      
         [DllImport("gdi32")]

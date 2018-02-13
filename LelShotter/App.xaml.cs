@@ -23,7 +23,8 @@ namespace LelShotter
         {
             base.OnStartup(e);
 
-            var savePath = LelShotter.Properties.Settings.Default.SavePath;
+            var savePath = Settings.Default.SavePath;
+
             if (!Directory.Exists(savePath))
             {
                 var dirCreated = Utility.CreateDirectory(savePath);
@@ -33,8 +34,8 @@ namespace LelShotter
                 }
                 else
                 {
-                    Logger.Log(Level.Info, "Setting desktop as default saving directory");
-                    LelShotter.Properties.Settings.Default.SavePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    Settings.Default.SavePath = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\LelShotter");
+                    Logger.Log(Level.Info, $"Setting {Settings.Default.SavePath} as default saving directory");
                 }
 
             }
@@ -54,11 +55,10 @@ namespace LelShotter
         private void CreateContextMenu()
         {
             _notifyIcon.ContextMenuStrip = new ContextMenuStrip();
-            //todo add tooltip value binding to appSettings
             _notifyIcon.ContextMenuStrip.Items.AddRange(new ToolStripItem[]
             {
-                new ToolStripMenuItem("Full screen capture"),
-                new ToolStripMenuItem("Select area to take"),
+                new ToolStripMenuItem("Full screen capture") {ShowShortcutKeys = true, ShortcutKeys = Keys.W | Keys.Shift | Keys.Alt},
+                new ToolStripMenuItem("Select area to take") {ShowShortcutKeys = true, ShortcutKeys = Keys.S | Keys.Shift | Keys.Alt},
                 new ToolStripSeparator(),
                 new ToolStripMenuItem("Save to disk") { CheckOnClick = true, Checked = Settings.Default.SaveMode },
                 new ToolStripMenuItem("Upload to Imgur") { CheckOnClick = true, Checked = Settings.Default.UploadMode },
@@ -71,9 +71,21 @@ namespace LelShotter
 
             _notifyIcon.ContextMenuStrip.Items[0].Click += (s, e) => TakeScreenshot(ScreenshotMode.FullScreen);
             _notifyIcon.ContextMenuStrip.Items[1].Click += (s, e) => TakeScreenshot(ScreenshotMode.Selection);
-            _notifyIcon.ContextMenuStrip.Items[3].Click += (s, e) => { _save = !_save; };
-            _notifyIcon.ContextMenuStrip.Items[4].Click += (s, e) => { _upload = !_upload; };
-            _notifyIcon.ContextMenuStrip.Items[5].Click += (s, e) => { _copy = !_copy; };
+            _notifyIcon.ContextMenuStrip.Items[3].Click += (s, e) => 
+            {
+                _save = !_save;
+                Settings.Default.SaveMode = _save;
+            };
+            _notifyIcon.ContextMenuStrip.Items[4].Click += (s, e) => 
+            {
+                _upload = !_upload;
+                Settings.Default.UploadMode = _upload;
+            };
+            _notifyIcon.ContextMenuStrip.Items[5].Click += (s, e) =>
+            {
+                _copy = !_copy;
+                Settings.Default.ClipboardMode = _copy;
+            };
             _notifyIcon.ContextMenuStrip.Items[7].Click += (s, e) =>
             {
                 var conf = new Configuration();
