@@ -48,8 +48,18 @@ namespace LelShotter
 
             _hotKeys.Add(new HotKey(Key.W, KeyModifier.Shift | KeyModifier.Alt, (h, m) => { TakeScreenshot(ScreenshotMode.FullScreen); }));
             _hotKeys.Add(new HotKey(Key.S, KeyModifier.Shift | KeyModifier.Alt, (h, m) => { TakeScreenshot(ScreenshotMode.Selection); }));
+
             CreateContextMenu();
+            LoadSettings();
+
             Logger.Log(Level.Info, "LelShotter started");
+        }
+
+        private void LoadSettings()
+        {
+            _upload = Settings.Default.UploadMode;
+            _save = Settings.Default.SaveMode;
+            _copy = Settings.Default.ClipboardMode;
         }
 
         private void CreateContextMenu()

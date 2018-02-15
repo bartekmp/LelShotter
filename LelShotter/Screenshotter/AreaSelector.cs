@@ -24,26 +24,25 @@ namespace LelShotter.Screenshotter
         
         private sealed class PictureForm : Form
         {
-            public Point StartPoint, FinishPoint;
             public Rectangle Selection;
+            private Point _startPoint;
+            private Point _finishPoint;
             private bool _isMouseDown;
+
             public PictureForm(Image image)
             {
-
-                DoubleBuffered = true;
-
                 MouseDown += (sender, args) =>
                 {
                     _isMouseDown = true;
-                    StartPoint.X = args.X;
-                    StartPoint.Y = args.Y;
+                    _startPoint.X = args.X;
+                    _startPoint.Y = args.Y;
                 };
                 MouseMove += (sender, args) =>
                 {
                     if (_isMouseDown)
                     {
-                        FinishPoint.X = args.X;
-                        FinishPoint.Y = args.Y;
+                        _finishPoint.X = args.X;
+                        _finishPoint.Y = args.Y;
                         Refresh();
                     }
                 };
@@ -51,54 +50,65 @@ namespace LelShotter.Screenshotter
                 {
                     if (_isMouseDown)
                     {
-                        FinishPoint.X = args.X;
-                        FinishPoint.Y = args.Y;
+                        _finishPoint.X = args.X;
+                        _finishPoint.Y = args.Y;
 
                         Selection = new Rectangle(
-                            Math.Min(StartPoint.X, FinishPoint.X),
-                            Math.Min(StartPoint.Y, FinishPoint.Y),
-                            Math.Abs(FinishPoint.X - StartPoint.X),
-                            Math.Abs(FinishPoint.Y - StartPoint.Y));
+                            Math.Min(_startPoint.X, _finishPoint.X),
+                            Math.Min(_startPoint.Y, _finishPoint.Y),
+                            Math.Abs(_finishPoint.X - _startPoint.X),
+                            Math.Abs(_finishPoint.Y - _startPoint.Y));
                         DialogResult = DialogResult.OK;
                         _isMouseDown = false;
                     }
                 };
-
                 Paint += (sender, args) =>
                 {
                     if (_isMouseDown)
                     {
                         var g = args.Graphics;
                         Selection = new Rectangle(
-                            Math.Min(StartPoint.X, FinishPoint.X),
-                            Math.Min(StartPoint.Y, FinishPoint.Y),
-                            Math.Abs(FinishPoint.X - StartPoint.X),
-                            Math.Abs(FinishPoint.Y - StartPoint.Y));
+                            Math.Min(_startPoint.X, _finishPoint.X),
+                            Math.Min(_startPoint.Y, _finishPoint.Y),
+                            Math.Abs(_finishPoint.X - _startPoint.X),
+                            Math.Abs(_finishPoint.Y - _startPoint.Y));
                         var pen = new Pen(Color.DarkRed, 5);
                         g.DrawRectangle(pen, Selection);
                     }
                 };
+                KeyPress += (sender, args) =>
+                {
+                    if (args.KeyChar == (char) Keys.Escape)
+                    {
+                        DialogResult = DialogResult.Cancel;
+                    }
+                };
 
+                DoubleBuffered = true;
+                ShowInTaskbar = false;
                 FormBorderStyle = FormBorderStyle.None;
-                BackgroundImage = DarkenImage(image);
+                DialogResult = DialogResult.None;
                 Width = (int) Screenshotter.ScreenWidth;
                 Height = (int) Screenshotter.ScreenHeight;
-                DialogResult = DialogResult.None;
+                BackgroundImage = MaskedImage(image);
+
                 Focus();
+                BringToFront();
+                
                 ShowDialog();
             }
             
-            private Image DarkenImage(Image image)
+            private Image MaskedImage(Image image)
             {
                 var tempBitmap = (Bitmap)image;
                 var newBitmap = new Bitmap(tempBitmap.Width, tempBitmap.Height);
                 var newGraphics = Graphics.FromImage(newBitmap);
                 float[][] floatColorMatrix = {
-                    new [] {1f, 0f, 0f, 0f, 0f},
-                    new [] {0f, 1f, 0f, 0f, 0f},
-                    new [] {0f, 0f, 1f, 0f, 0f},
-                    new [] {0f, 0f, 0f, 1f, 0f},
-                    new[] { (float)20.0 / 255.0f, (float)20.0 / 255.0f, (float)20.0 / 255.0f, 1, 1}
+                    new [] { 1f, 0f, 0f, 0f, 0f },
+                    new [] { 0f, 1f, 0f, 0f, 0f },
+                    new [] { 0f, 0f, 1f, 0f, 0f },
+                    new [] { 0f, 0f, 0f, 1f, 0f },
+                    new [] { 20.0f/255.0f, 20.0f/255.0f, 20.0f/255.0f, 1f, 1f }
                 };
 
                 var newColorMatrix = new ColorMatrix(floatColorMatrix);
