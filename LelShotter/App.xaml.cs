@@ -23,7 +23,7 @@ namespace LelShotter
         {
             base.OnStartup(e);
 
-            var savePath = Settings.Default.SavePath;
+            var savePath = Environment.ExpandEnvironmentVariables(Settings.Default.SavePath);
 
             if (!Directory.Exists(savePath))
             {
@@ -109,7 +109,10 @@ namespace LelShotter
             Logger.Log(Level.Info, $"Taking screenshot with flags: upload={_upload}, save={_save}, copy={_copy}");
             var message = await new Screenshotter.Screenshotter(_upload, _save, _copy).TakeScreenshot(mode);
             Logger.Log(message.Level, message.Message);
-            CompletePopup(message);
+            if (Settings.Default.DisplayPopups)
+            {
+                CompletePopup(message);
+            }
         }
 
         private void CompletePopup(StatusMessage msg)

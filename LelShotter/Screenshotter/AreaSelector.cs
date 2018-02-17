@@ -86,6 +86,7 @@ namespace LelShotter.Screenshotter
 
                 DoubleBuffered = true;
                 ShowInTaskbar = false;
+                TopLevel = true;
                 FormBorderStyle = FormBorderStyle.None;
                 DialogResult = DialogResult.None;
                 Width = (int) Screenshotter.ScreenWidth;

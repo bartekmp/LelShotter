@@ -24,10 +24,11 @@
                     </ComboBox>
                 </DockPanel>
             </GroupBox>
-            <GroupBox Header="Debug mode" HorizontalAlignment="Left" Height="Auto" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
+            <GroupBox Header="Debug mode" HorizontalAlignment="Left" Height="122" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
                 <StackPanel Margin="10,10,10,10" Width="Auto">
                     <CheckBox x:Name="VerboseModeCheckBox" Content="Verbose logging" Height="28" VerticalAlignment="Top" IsChecked="{Binding VerboseMode, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" />
                     <CheckBox x:Name="DebugModeCheckBox" Content="Debug logging" Height="28" VerticalAlignment="Top" IsChecked="{Binding DebugMode, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" />
+                    <CheckBox x:Name="DisplayPopupsCheckBox" Content="Display popup notifications" Height="28" VerticalAlignment="Top" IsChecked="{Binding DisplayPopups, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" />
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Autostart" HorizontalAlignment="Left" Height="Auto" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
