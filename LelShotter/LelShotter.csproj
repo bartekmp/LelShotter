@@ -98,6 +98,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\DataFormats.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Screenshotter\AreaSelector.cs" />
     <Compile Include="Models\DataModels.cs" />
     <Compile Include="Models\LogLevels.cs" />

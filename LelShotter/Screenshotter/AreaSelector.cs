@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace LelShotter.Screenshotter
@@ -83,6 +84,14 @@ namespace LelShotter.Screenshotter
                         DialogResult = DialogResult.Cancel;
                     }
                 };
+
+                var leftmostScreen = Screen.AllScreens.ElementAtOrDefault(0);
+                if (leftmostScreen != null)
+                {
+                    Left = leftmostScreen.WorkingArea.Left;
+                    Top = leftmostScreen.WorkingArea.Top;
+                }
+                //StartPosition = FormStartPosition.CenterScreen;
 
                 DoubleBuffered = true;
                 ShowInTaskbar = false;

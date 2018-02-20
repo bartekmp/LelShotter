@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -76,18 +77,29 @@ namespace LelShotter.Screenshotter
 
                 var filename =
                     Path.Combine(savePath,
-                        $"ScreenCapture -{DateTime.Now:yyyyMMdd-HHmmss}.png"
+                        $"ScreenCapture-{DateTime.Now:yyyyMMdd-HHmmss}.png"
                     );
                 try
                 {
-                    bitmap.Save(filename);
+                    var imgfmt = ImageFormat.Png;
+                    if (Settings.Default.UsedFormat == "JPG")
+                    {
+                        imgfmt = ImageFormat.Jpeg;
+                    }
+
+                    filename = Path.ChangeExtension(filename, imgfmt.ToString().ToLower());
+                    bitmap.Save(filename, imgfmt);
+
+                    completeMessage += $"Screenshot saved to {filename}";
+                    levelMessage = Level.Success;
                 }
                 catch (ExternalException ex)
                 {
                     Logger.Log(Level.Error, ex.Message);
+
+                    completeMessage += $"Unable to save {filename}";
+                    levelMessage = Level.Error;
                 }
-                completeMessage += $"Screenshot saved to {filename}";
-                levelMessage = Level.Success;
             }
 
             if (Upload)
