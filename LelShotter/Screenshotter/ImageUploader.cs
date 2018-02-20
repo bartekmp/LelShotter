@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Threading.Tasks;
 using Imgur.API;
 using Imgur.API.Authentication.Impl;
@@ -23,6 +24,11 @@ namespace LelShotter.Screenshotter
             catch (ImgurException ie)
             {
                 Logger.Log(Level.Info, $"Exception occurred while uploading an image: {ie.Message}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(Level.Error, $"Unrecognized error occurred during image upload: {ex.Message}");
                 return null;
             }
         }
