@@ -15,15 +15,15 @@
         <StackPanel HorizontalAlignment="Left" Height="451" Margin="10,10,0,0" VerticalAlignment="Top" Width="455">
             <GroupBox Header="Save location" HorizontalAlignment="Left" Height="Auto" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
                 <DockPanel HorizontalAlignment="Left" Height="28" LastChildFill="False" Margin="10,10,10,10" VerticalAlignment="Top" Width="402">
-                    <TextBox HorizontalAlignment="Left" Height="24" Margin="0,0,0,0" TextWrapping="Wrap" x:Name="PathBox" Text="{Binding SavePath, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" VerticalAlignment="Top" Width="253"/>
-                    <Button Content="Choose path" HorizontalAlignment="Right" Margin="32,2,0,0" VerticalAlignment="Top" Width="75" Click="SetPath_Click"/>
+                    <TextBox HorizontalAlignment="Left" Height="24" Margin="0,0,0,0" TextWrapping="Wrap" x:Name="PathBox" Text="{Binding SavePath, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" VerticalAlignment="Top" Width="306"/>
+                    <Button Content="Choose path" HorizontalAlignment="Right" Margin="16,2,0,0" VerticalAlignment="Top" Width="75" Click="SetPath_Click"/>
                 </DockPanel>
             </GroupBox>
             <GroupBox Header="File format" HorizontalAlignment="Left" Height="Auto" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
                 <DockPanel HorizontalAlignment="Left" Height="24" LastChildFill="False" Margin="10,10,10,10" VerticalAlignment="Top" Width="402">
                     <Label Content="Screenshot file format:"/>
                     <ComboBox Width="Auto" 
-                              ItemsSource="{Binding Path=SupportedFormatList}" 
+                              ItemsSource="{Binding Path=(viewModel:DataFormats.SupportedFormatList)}" 
                               SelectedItem="{Binding UsedFormat, Mode=OneWayToSource, Source={x:Static appSettings:Settings.Default}}"
                               IsSynchronizedWithCurrentItem="True"
                               SelectedIndex="0"/>
@@ -31,14 +31,14 @@
             </GroupBox>
             <GroupBox Header="Debug mode" HorizontalAlignment="Left" Height="122" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
                 <StackPanel Margin="10,10,10,10" Width="Auto">
-                    <CheckBox x:Name="VerboseModeCheckBox" Content="Verbose logging" Height="28" VerticalAlignment="Top" IsChecked="{Binding VerboseMode, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" />
-                    <CheckBox x:Name="DebugModeCheckBox" Content="Debug logging" Height="28" VerticalAlignment="Top" IsChecked="{Binding DebugMode, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" />
+                    <CheckBox x:Name="VerboseModeCheckBox" Content="Verbose logging" Height="28" VerticalAlignment="Top" IsChecked="{Binding VerboseMode, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" Click="LogModeCheckBox_OnChecked" />
+                    <CheckBox x:Name="DebugModeCheckBox" Content="Debug logging" Height="28" VerticalAlignment="Top" IsChecked="{Binding DebugMode, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" Click="LogModeCheckBox_OnChecked" />
                     <CheckBox x:Name="DisplayPopupsCheckBox" Content="Display popup notifications" Height="28" VerticalAlignment="Top" IsChecked="{Binding DisplayPopups, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" />
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Autostart" HorizontalAlignment="Left" Height="Auto" Margin="10,22,0,0" VerticalAlignment="Top" Width="435">
                 <StackPanel Margin="10,10,10,10" Width="Auto">
-                    <CheckBox IsEnabled="False" x:Name="AutostartCheckBox" Content="Launch after system start" Height="28" VerticalAlignment="Top" IsChecked="{Binding AutoStart, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" />
+                    <CheckBox x:Name="AutostartCheckBox" Content="Launch after system start (for current user)" Height="28" VerticalAlignment="Top" IsChecked="{Binding AutoStart, Mode=TwoWay, Source={x:Static appSettings:Settings.Default}}" Checked="AutostartCheckBox_Checked" />
                 </StackPanel>
             </GroupBox>
         </StackPanel>

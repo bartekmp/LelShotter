@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -31,14 +32,14 @@ namespace LelShotter.Screenshotter
         }
         public async Task<StatusMessage> TakeScreenshot(ScreenshotMode mode)
         {
-            var completeMessage = string.Empty;
+            var completeMessage = new StringBuilder();
             var levelMessage = Level.Error;
 
             if (!(Upload || Save || Copy))
             {
                 levelMessage = Level.Info;
-                completeMessage = "No action was selected!";
-                return new StatusMessage(levelMessage, completeMessage);
+                completeMessage.Append("No action was selected!");
+                return new StatusMessage(levelMessage, completeMessage.ToString());
             }
 
             var bitmap = new Bitmap((int)ScreenWidth, (int)ScreenHeight);
@@ -49,10 +50,10 @@ namespace LelShotter.Screenshotter
             }
             catch (Exception ex)
             {
-                completeMessage = ex.Message;
+                completeMessage.Append(ex.Message);
                 levelMessage = Level.Error;
 
-                return new StatusMessage(levelMessage, completeMessage);
+                return new StatusMessage(levelMessage, completeMessage.ToString());
             }
             
             if (mode == ScreenshotMode.Selection)
@@ -66,8 +67,8 @@ namespace LelShotter.Screenshotter
                 else
                 {
                     levelMessage = Level.Error;
-                    completeMessage = "Could not get user selection!";
-                    return new StatusMessage(levelMessage, completeMessage);
+                    completeMessage.Append("Could not get user selection!");
+                    return new StatusMessage(levelMessage, completeMessage.ToString());
                 }
             }
                 
@@ -90,14 +91,14 @@ namespace LelShotter.Screenshotter
                     filename = Path.ChangeExtension(filename, imgfmt.ToString().ToLower());
                     bitmap.Save(filename, imgfmt);
 
-                    completeMessage += $"Screenshot saved to {filename}";
+                    completeMessage.Append($"Screenshot saved to {filename}. ");
                     levelMessage = Level.Success;
                 }
                 catch (ExternalException ex)
                 {
                     Logger.Log(Level.Error, ex.Message);
 
-                    completeMessage += $"Unable to save {filename}";
+                    completeMessage.Append($"Unable to save {filename}. ");
                     levelMessage = Level.Error;
                 }
             }
@@ -108,13 +109,13 @@ namespace LelShotter.Screenshotter
                 if (!Copy)
                 {
                     System.Diagnostics.Process.Start(url);
-                    completeMessage += "Image uploaded to Imgur, opening URL...";
+                    completeMessage.Append($"Image uploaded to Imgur, opening URL: {url}. ");
                     levelMessage = Level.Success;
                 }
                 else
                 {
                     Clipboard.SetText(url);
-                    completeMessage += "Image uploaded to Imgur, URL copied to clipboard.";
+                    completeMessage.Append($"Image uploaded to Imgur, URL copied to clipboard: {url}. ");
                     levelMessage = Level.Success;
                 }
             }
@@ -123,13 +124,13 @@ namespace LelShotter.Screenshotter
             {
                 var bitmapData = LoadBitmap(bitmap);
                 Clipboard.SetImage(bitmapData);
-                completeMessage += "Image saved to clipboard.";
+                completeMessage.Append("Image saved to clipboard. ");
                 levelMessage = Level.Success;
             }
 
             screenGraphics.Dispose();
             bitmap.Dispose();
-            return new StatusMessage(levelMessage, completeMessage);
+            return new StatusMessage(levelMessage, completeMessage.ToString());
         }
      
         [DllImport("gdi32")]

@@ -2,6 +2,7 @@
 using System.IO;
 using Settings = LelShotter.Properties.Settings;
 
+
 namespace LelShotter.Utils
 {
     public static class Logger
@@ -9,26 +10,33 @@ namespace LelShotter.Utils
         private const string LogPath = "LelShotter.out.log";
         private const string ErrLogPath = "LelShotter.err.log";
 
+        private static readonly string ProgramDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "LelShotter");
+        private static readonly string FullLogPath = Path.Combine(ProgramDataPath, LogPath);
+        private static readonly string FullErrLogPath = Path.Combine(ProgramDataPath, ErrLogPath);
+
         private static StreamWriter _out;
         private static StreamWriter _err;
 
         private const string LogFormat = "{0} [{1}]: {2}";
-
-
+        
         static Logger()
         {
            OpenStreams();
         }
 
-        private static void OpenStreams()
+        public static void OpenStreams()
         {
+            if (!Directory.Exists(ProgramDataPath))
+            {
+                Directory.CreateDirectory(ProgramDataPath);
+            }
             if (_out == null && Settings.Default.DebugMode)
             {
-                _out = new StreamWriter(LogPath, true) {AutoFlush = true};
+                _out = new StreamWriter(FullLogPath, true) {AutoFlush = true};
             }
             if (_err == null && Settings.Default.VerboseMode)
             {
-                _err = new StreamWriter(ErrLogPath, true) {AutoFlush = true};
+                _err = new StreamWriter(FullErrLogPath, true) {AutoFlush = true};
             }
         }
 
