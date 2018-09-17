@@ -85,13 +85,11 @@ namespace LelShotter.Screenshotter
                     }
                 };
 
-                var leftmostScreen = Screen.AllScreens.ElementAtOrDefault(0);
-                if (leftmostScreen != null)
-                {
-                    Left = leftmostScreen.WorkingArea.Left;
-                    Top = leftmostScreen.WorkingArea.Top;
-                }
-                //StartPosition = FormStartPosition.CenterScreen;
+                var leftBound = Screen.AllScreens.OrderBy(s => s.Bounds.X).First().Bounds.X;
+                var upperBound = Screen.AllScreens.OrderBy(s => s.Bounds.Y).First().Bounds.Y;
+
+                StartPosition = FormStartPosition.Manual;
+                Location = new Point(leftBound, upperBound);
 
                 DoubleBuffered = true;
                 ShowInTaskbar = false;
